@@ -1,7 +1,10 @@
 # Collection Engine — Performance / Load Test Summary (Sample)
 
 > Representative load test report for portfolio purposes. Figures are illustrative of a real
-> test structure and scale, not tied to any specific company's production environment.
+> test structure and scale, not tied to any specific company's production environment — and
+> intentionally distinct from the real Connected Banking load test documented elsewhere in this
+> portfolio, since Collection Engine and Connected Banking are separate products with separate
+> performance profiles.
 
 ## Test Configuration
 
@@ -9,32 +12,32 @@
 |---|---|
 | Tool | Apache JMeter |
 | Test Type | Sustained Load / Soak Test |
-| Duration | 6 hours |
-| Merchants Simulated | 62 |
-| Total Transactions Generated | 405,067 |
-| Target Throughput | 80.2 TPS |
+| Duration | 3 hours |
+| Merchants Simulated | 40 |
+| Total Transactions Generated | 180,000 |
+| Target Throughput | 45 TPS |
 
 ## Results
 
 | Metric | Result |
 |---|---|
-| Stable Throughput Achieved | ~78.5 TPS – ~80.2 TPS |
-| Peak Throughput Validated | ~100 TPS |
-| Error Rate | 0.001% |
-| P90 Latency | 82 ms |
-| P95 Latency | 319 ms |
-| P99 Latency | 1500 ms |
+| Stable Throughput Achieved | ~42 TPS – ~45 TPS |
+| Peak Throughput Validated | ~60 TPS |
+| Error Rate | 0.01% |
+| P90 Latency | 95 ms |
+| P95 Latency | 240 ms |
+| P99 Latency | 900 ms |
 | Uptime During Test | 99.9%+ |
 
 ## Bottleneck Analysis
 
 The application layer sustained target throughput comfortably. The limiting factor observed was
-**Redis queue memory** under sustained load — as the queue backlog grew during traffic spikes,
-memory pressure on the Redis instance became the bottleneck before the application's own
-processing capacity was exhausted.
+**database connection pool saturation** under sustained load — as concurrent settlement
+calculation queries grew during traffic spikes, the connection pool became the bottleneck before
+the application's own processing capacity was exhausted.
 
-**Recommendation:** size the Redis queue's memory allocation for peak-hour traffic patterns, not
-average throughput, and add queue-depth alerting ahead of the memory ceiling.
+**Recommendation:** size the database connection pool for peak-hour traffic patterns, not
+average throughput, and add connection-pool-utilization alerting ahead of saturation.
 
 ## Test Coverage During Load Run
 
@@ -46,7 +49,7 @@ average throughput, and add queue-depth alerting ahead of the memory ceiling.
 
 ## Conclusion
 
-The Collection Engine met its throughput target under a 6-hour sustained load test across 62
-simulated merchants and 400K+ transactions, with error rates well within acceptable limits
-(0.001%). The primary scaling consideration going forward is infrastructure-level (queue memory)
-rather than application logic.
+The Collection Engine met its throughput target under a 3-hour sustained load test across 40
+simulated merchants and 180K+ transactions, with error rates well within acceptable limits
+(0.01%). The primary scaling consideration going forward is infrastructure-level (database
+connection pool sizing) rather than application logic.

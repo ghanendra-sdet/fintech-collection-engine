@@ -160,9 +160,13 @@ The Collection Engine doesn't work in isolation — conceptually it interacts wi
 
 ## 🏆 Key Achievements
 
-- Validated a 57-service distributed architecture handling **1.6M+ daily transactions**
-- Confirmed stable throughput of **~78.5 TPS against an 80.2 TPS target**, with peak validation
-  up to ~100 TPS
+- Owned QA coverage across Collection Engine's **~40-service architecture** — including five
+  dedicated collection-type services (UPI, QR, VAM, Payment Link, Manual Deposit), settlement,
+  commercial/GST calculation, and reporting/analytics services (see
+  [Service Architecture](./docs/service-architecture.md) for the full breakdown)
+- Designed integration test coverage across service boundaries most prone to drift — e.g.
+  Settlement Calculation Service → Ledger Service — where a historically common defect theme
+  (missing ledger debit entries) originates
 - Managed and tracked **300+ defects** end-to-end (identification → triage → regression
   verification)
 - Built and maintained an automated regression suite in Playwright/TypeScript covering the
@@ -202,23 +206,25 @@ merchant data.
 
 ## 📈 Performance / Load Testing
 
-Sample load test results (dummy/representative figures for portfolio purposes):
+Sample load test results (dummy/representative figures for portfolio purposes — a separate,
+illustrative exercise from the real Connected Banking load test documented elsewhere in this
+portfolio):
 
 | Metric | Result |
 |---|---|
 | Tool | JMeter |
-| Test Duration | 6 hours |
-| Merchants Simulated | 62 |
-| Total Transactions | 405,067 |
-| Stable Throughput | ~80.2 TPS |
-| Error Rate | 0.001% |
-| P90 Latency | 82 ms |
-| P95 Latency | 319 ms |
-| P99 Latency | 1500 ms |
+| Test Duration | 3 hours |
+| Merchants Simulated | 40 |
+| Total Transactions | 180,000 |
+| Stable Throughput | ~45 TPS |
+| Error Rate | 0.01% |
+| P90 Latency | 95 ms |
+| P95 Latency | 240 ms |
+| P99 Latency | 900 ms |
 
-**Observation:** Under sustained load, the Redis queue memory limit became the primary bottleneck
-— not application-layer throughput. This is a common pattern in queue-backed transaction systems
-and a useful lesson for capacity planning conversations with engineering.
+**Observation:** Under sustained load, database connection pool saturation became the limiting
+factor before application logic did — a common pattern worth flagging early in capacity planning
+conversations with engineering.
 
 See [`test-reports/`](./test-reports) for the full sample performance report.
 
@@ -258,7 +264,9 @@ collection-engine/
 ├── README.md                     → This file
 ├── docs/
 │   ├── business-overview.md      → What Collection Engine is, glossary, cross-module map
-│   └── architecture-and-flow.md  → Detailed merchant/admin flow diagrams
+│   ├── architecture-and-flow.md  → Detailed merchant/admin flow diagrams
+│   ├── feature-modules.md        → Full feature/screen inventory (Dashboard, Search, Collection Types, Reports)
+│   └── service-architecture.md   → Microservice-level decomposition & integration test boundaries
 ├── test-cases/
 │   └── regression-checklist.md   → Full regression suite + edge cases
 ├── automation/
