@@ -121,27 +121,41 @@ automated test coverage across the transaction lifecycle.
 
 ### Merchant Regression Flow (highest-priority end-to-end scenario)
 
+This is the single highest-priority path through the system — nearly every release regression
+run starts here. Each arrow below is annotated with what's actually being validated at that
+step, since most real-world defects in this module are **data consistency issues between steps**,
+not isolated screen bugs.
+
 ```
 Login
-  │
+  │  authenticates the merchant session
   ▼
 Dashboard
-  │
+  │  summary tiles (Today's Collection, Success Rate, etc.) must match live
+  │  transaction data — never a stale/cached value
   ▼
-Collection
-  │
+Collection ──▶ UPI · QR · VAM · Payment Link · Manual Deposit
+  │             5 independent initiation flows, each with its own failure
+  │             surface — see docs/business-flow.md for the detailed diagrams
   ▼
 Transaction Search
-  │
+  │  filter by Order ID / Transaction ID / UTR / Merchant Ref / Customer / Date / Status
   ▼
 Transaction Details
-  │
+  │  every field (status, gateway response, amount, GST, commercial,
+  │  settlement, timeline) must match the Search row exactly — no drift
   ▼
 Settlement
-  │
+  │  reconciles to the Ledger, net of Commercial fee + GST, correct to the paisa
   ▼
 Reports
+     exported totals must match Settlement + Transaction data byte-for-byte
 ```
+
+> For the full customer-facing journey behind the "Collection" step — what actually happens for
+> each collection type, from the customer's perspective, through to settlement — see
+> [`docs/business-flow.md`](./docs/business-flow.md). For the service-level view of what's
+> running behind each step above, see [`docs/service-architecture.md`](./docs/service-architecture.md).
 
 ### Admin Functions
 
