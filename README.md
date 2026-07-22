@@ -286,7 +286,8 @@ collection-engine/
 │   ├── architecture-and-flow.md  → Internal QA/regression flow diagrams (dashboard, admin, states)
 │   ├── business-flow.md          → End-to-end customer payment journey per collection type, settlement, onboarding
 │   ├── feature-modules.md        → Full feature/screen inventory (Dashboard, Search, Collection Types, Reports)
-│   └── service-architecture.md   → Microservice-level decomposition & integration test boundaries
+│   ├── service-architecture.md   → Microservice-level decomposition & integration test boundaries
+│   └── shared-platform-services.md → Company-wide services this product depends on (Auth, GST/Ledger/Settlement Engines, etc.)
 ├── test-cases/
 │   └── regression-checklist.md   → Full regression suite + edge cases
 ├── automation/
