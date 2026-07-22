@@ -303,3 +303,11 @@ collection-engine/
 > fintech QA, keep `docs/business-overview.md` as the "start here" link at the top of the README
 > — non-QA readers (HR, hiring managers, other engineers) will get oriented fastest there before
 > diving into test cases or automation code.
+
+## 🤖 Support & Dispute Resolution
+
+Collection issues (stuck transactions, disputes, account detail changes) are handled by the
+shared [AI Dispute Resolution Engine](https://github.com/ghanendra-sdet/ai-dispute-resolution-engine)
+— a single AI-powered support layer common across Collection, Payout, Connected Banking, BBPS,
+and YOBO. It resolves ~80% of issues without human involvement, cutting average ticket resolution
+time from a 24–72 hour baseline to under 6 hours.
