@@ -1,7 +1,10 @@
 # Sample Defect Report — Collection Engine
 
 > Template + worked examples using dummy data. Reflects the recurring defect themes commonly
-> found in Collection Engine regression.
+> found in Collection Engine regression. Several defects below map directly to integration
+> boundaries documented in [`docs/service-architecture.md`](./docs/service-architecture.md) and
+> flow steps in [`docs/business-flow.md`](./docs/business-flow.md) — see
+> [`docs/README.md`](./docs/README.md) for the full documentation map.
 
 ## Defect Theme Taxonomy
 

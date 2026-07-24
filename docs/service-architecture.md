@@ -86,5 +86,5 @@ than a single "collection processor" with a type flag. From a QA perspective, th
 |---|---|
 | Collection Type Service → Payment Processing Service | Each type correctly hands off to the shared processor with the right payload shape |
 | Payment Processing Service → Settlement Calculation Service | Successful payments correctly trigger commercial/GST calculation |
-| Settlement Calculation Service → Ledger Service | Every settlement produces a matching ledger entry (a historically common defect theme — see [`bug-reports/`](../bug-reports)) |
+| Settlement Calculation Service → Ledger Service | Every settlement produces a matching ledger entry (a historically common defect theme — see [`bug-reports/`](../sample-defect-report.md)) |
 | Transaction services → Reports Service | Reports reflect the same data visible in Transaction Search/Details, with no drift |

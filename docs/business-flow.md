@@ -227,4 +227,4 @@ flawless dashboard and still lose merchant trust if, say, a Payment Link can be 
 VAM credit gets matched to the wrong customer. The failure branches documented above (declines,
 expiries, mismatches, manual-entry errors) are exactly where the highest-value, hardest-to-find
 defects tend to live — and are the primary source for the edge cases listed in
-[`test-cases/regression-checklist.md`](../test-cases/regression-checklist.md).
+[`test-cases/regression-checklist.md`](../regression-checklist.md).

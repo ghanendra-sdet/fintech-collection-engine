@@ -53,3 +53,7 @@ The Collection Engine met its throughput target under a 3-hour sustained load te
 simulated merchants and 180K+ transactions, with error rates well within acceptable limits
 (0.01%). The primary scaling consideration going forward is infrastructure-level (database
 connection pool sizing) rather than application logic.
+
+**See also:** [`docs/service-architecture.md`](./docs/service-architecture.md) for which
+services sit on this load path, and [`README.md`](./README.md#-key-achievements) for how this
+result feeds into the Key Achievements summary.

@@ -9,6 +9,10 @@
 > All content here is written from first-hand QA experience but uses **generic/sample data only**.
 > No client names, company names, or confidential/production information are included.
 > Dates and timelines are placeholders — update `[Timeline]` before publishing.
+>
+> 📍 **New here?** [`docs/README.md`](./docs/README.md) is a documentation map answering "what is
+> this, how does it work, who's involved, what does it depend on" — with a recommended reading
+> order through every doc in this repo.
 
 ---
 
@@ -25,6 +29,10 @@
 9. [Regression Checklist](#-regression-checklist)
 10. [Screenshots & Reports](#-screenshots--reports)
 11. [Repository Structure](#-repository-structure)
+
+> Deeper dives not covered inline in this README: [Stakeholders & Dependencies](./docs/business-overview.md),
+> [Service Architecture](./docs/service-architecture.md), [Shared Platform Services](./docs/shared-platform-services.md),
+> [UI Consistency](./docs/ui-consistency.md) — see [`docs/README.md`](./docs/README.md) for the full map.
 
 ---
 
@@ -245,7 +253,7 @@ portfolio):
 factor before application logic did — a common pattern worth flagging early in capacity planning
 conversations with engineering.
 
-See [`test-reports/`](./test-reports) for the full sample performance report.
+See [`performance-test-summary.md`](./performance-test-summary.md) for the full sample performance report.
 
 ---
 
@@ -265,39 +273,48 @@ See [`test-reports/`](./test-reports) for the full sample performance report.
 - [ ] Ledger Entries
 - [ ] Permissions / Role-Based Access
 
-Full checklist with edge cases available in [`test-cases/`](./test-cases).
+Full checklist with edge cases available in [`regression-checklist.md`](./regression-checklist.md).
 
 ---
 
 ## 📸 Screenshots & Reports
 
 Sample test execution reports, defect report templates, and performance test summaries are
-available under [`test-reports/`](./test-reports) and [`bug-reports/`](./bug-reports).
+available in [`performance-test-summary.md`](./performance-test-summary.md) and
+[`sample-defect-report.md`](./sample-defect-report.md).
 
 ---
 
 ## 📁 Repository Structure
 
+> **New here?** Start with [`docs/README.md`](./docs/README.md) — a documentation map that
+> answers "what is this, how does it work, who's involved, what does it depend on" and points to
+> exactly the right doc for each question, in recommended reading order.
+
 ```
-collection-engine/
+fintech-collection-engine/
 ├── README.md                     → This file
+├── regression-checklist.md       → Full regression suite + edge cases (64 test cases)
+├── sample-defect-report.md       → Defect theme taxonomy + worked defect examples
+├── performance-test-summary.md   → Sample JMeter load test report
 ├── docs/
-│   ├── business-overview.md      → What Collection Engine is, glossary, cross-module map
+│   ├── README.md                 → 📍 Documentation map — start here
+│   ├── business-overview.md      → What Collection Engine is, stakeholders, dependencies, glossary
 │   ├── architecture-and-flow.md  → Internal QA/regression flow diagrams (dashboard, admin, states)
 │   ├── business-flow.md          → End-to-end customer payment journey per collection type, settlement, onboarding
 │   ├── feature-modules.md        → Full feature/screen inventory (Dashboard, Search, Collection Types, Reports)
 │   ├── service-architecture.md   → Microservice-level decomposition & integration test boundaries
-│   └── shared-platform-services.md → Company-wide services this product depends on (Auth, GST/Ledger/Settlement Engines, etc.)
-├── test-cases/
-│   └── regression-checklist.md   → Full regression suite + edge cases
-├── automation/
-│   ├── README.md                 → Framework setup & structure
-│   └── sample-collection.spec.ts → Sample Playwright + TypeScript test (dummy data)
-├── bug-reports/
-│   └── sample-defect-report.md   → Defect report template with dummy example
-└── test-reports/
-    └── performance-test-summary.md → Sample JMeter load test report
+│   ├── shared-platform-services.md → Company-wide services this product depends on (Auth, GST/Ledger/Settlement Engines, etc.)
+│   └── ui-consistency.md         → Cross-screen UI/UX consistency (status badges, formatting, terminology, a11y)
+└── automation/
+    ├── README.md                 → Framework setup & structure
+    └── sample-collection.spec.ts → Sample Playwright + TypeScript test (dummy data)
 ```
+
+> **Note on structure:** `bug-reports/`, `test-cases/`, and `test-reports/` were originally
+> separate folders, each holding a single file — flattened to the repo root since a folder
+> holding exactly one file adds navigation overhead without organizing anything. `docs/` and
+> `automation/` remain folders because each genuinely groups multiple related files.
 
 > **Suggestion:** if you want this repo to double as a learning resource for someone new to
 > fintech QA, keep `docs/business-overview.md` as the "start here" link at the top of the README
@@ -309,5 +326,5 @@ collection-engine/
 Collection issues (stuck transactions, disputes, account detail changes) are handled by the
 shared [AI Dispute Resolution Engine](https://github.com/ghanendra-sdet/ai-dispute-resolution-engine)
 — a single AI-powered support layer common across Collection, Payout, Connected Banking, BBPS,
-and YOBO. It resolves ~80% of issues without human involvement, cutting average ticket resolution
+Reseller, and YOBO. It resolves ~80% of issues without human involvement, cutting average ticket resolution
 time from a 24–72 hour baseline to under 6 hours.

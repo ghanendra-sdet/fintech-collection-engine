@@ -3,6 +3,11 @@
 Automation for the Collection Engine's primary merchant regression path, built with
 **Playwright + TypeScript** using the **Page Object Model (POM)**.
 
+> Automated scenarios trace directly to [`../regression-checklist.md`](../regression-checklist.md)
+> (see the Priority Automation Candidates section there) and the flow diagrams in
+> [`../docs/architecture-and-flow.md`](../docs/architecture-and-flow.md). See
+> [`../docs/README.md`](../docs/README.md) for the full documentation map.
+
 ## Why Playwright + TypeScript
 
 - Native auto-waiting reduces flaky tests around async transaction status updates
@@ -61,3 +66,8 @@ run on every release:
 4. Transaction Search
 5. Transaction Details
 6. Settlement
+
+Collection-type-specific scenarios (TC-021–039) and UI consistency checks (TC-059–064, see
+[`../docs/ui-consistency.md`](../docs/ui-consistency.md)) are the next priority tier for
+automation expansion — currently manual-only, per
+[`../docs/feature-modules.md`](../docs/feature-modules.md)'s Future Test Coverage note.

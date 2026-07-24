@@ -2,7 +2,8 @@
 
 > **Start here if you're new to fintech QA, in HR, or from a non-QA technical role.** This
 > document explains what a Collection Engine does and why it matters, before you look at any
-> test case or code.
+> test case or code. See [`README.md`](./README.md) for the full documentation map if you landed
+> here directly.
 
 ## 1. What problem does it solve?
 
@@ -66,7 +67,46 @@ This is why QA strategy for this module is built around **financial correctness 
 commercial accuracy, ledger consistency, and settlement reconciliation are prioritized above
 purely cosmetic issues.
 
-## 6. Cross-Module Dependencies
+## 6. Involved Parties (Stakeholders)
+
+Beyond the Merchant/Admin split in section 3, a Collection Engine at enterprise scale involves a
+wider cast — each with a different stake in the system behaving correctly:
+
+| Stakeholder | Why They Care |
+|---|---|
+| **Customers** | The end payer — needs the payment experience to work, regardless of collection type |
+| **Merchants** | Need accurate, timely settlement and trustworthy reporting |
+| **Merchant Admins** | Configure and monitor collection on the merchant's behalf |
+| **Finance Team** | Owns commercial accuracy, GST compliance, and ledger correctness |
+| **Operations Team** | Monitors transaction health, settlement runs, and escalations |
+| **Compliance Team** | Cares about audit trail completeness and regulatory (GST, KYC-adjacent) correctness |
+| **Product Team** | Owns the roadmap for new collection types and feature scope |
+| **Support Team** | Handles merchant/customer escalations — directly affected by UI/data inconsistencies (see [`ui-consistency.md`](./ui-consistency.md)) |
+
+## 7. Dependencies
+
+Collection Engine does not operate in isolation. Two layers of dependency matter for testing:
+
+**This product's own internal services** — see [`service-architecture.md`](./service-architecture.md)
+for the full ~40-service breakdown (collection-type services, settlement, commercial/GST,
+reporting).
+
+**Shared, company-wide platform services** — see [`shared-platform-services.md`](./shared-platform-services.md)
+for the engines Collection Engine consumes rather than reimplements: Authentication, Merchant
+Onboarding, Commercial/GST/Ledger/Settlement/Reconciliation Engines, Audit Logs, Notification
+Service, and more.
+
+**External, third-party dependencies:**
+
+- **Banks** — actual settlement and fund movement
+- **UPI Switches** — UPI collection processing
+- **Payment Gateways** — card/net-banking/wallet collection routing
+- **SMS Gateway** / **Email Services** — transaction and settlement notifications
+- **GST Systems** — tax computation/reporting compliance
+- **KYC Services** — merchant verification (upstream of Collection enablement)
+- **Webhook Consumers** — merchant-side systems (ERPs, internal tools) receiving callback events
+
+## 8. Cross-Module Dependencies (Conceptual, Within the Platform)
 
 The Collection Engine conceptually depends on / interacts with:
 
@@ -75,8 +115,11 @@ The Collection Engine conceptually depends on / interacts with:
 - **Settlement & Ledger** — reconciliation and audit trail
 - **Admin Portal** — configuration and monitoring
 - **Reporting** — merchant and internal analytics
+- **AI Dispute Resolution Engine** — handles merchant/customer support issues raised about
+  Collection transactions (transaction status, disputes) as part of the shared cross-product
+  support layer
 
-## 7. Next: The Full Customer Payment Journey
+## 9. Next: The Full Customer Payment Journey
 
 Everything above describes the module conceptually. For the actual step-by-step flow — what a
 customer experiences paying via UPI vs. QR vs. Virtual Account vs. Payment Link vs. Manual

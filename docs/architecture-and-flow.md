@@ -1,5 +1,11 @@
 # Collection Engine — Architecture & Flow
 
+> This is the internal, system-level "Tech Flow" view — state machines, admin flow, service
+> interaction. For the customer/merchant-facing journey, see [`business-flow.md`](./business-flow.md).
+> For the service-level (microservice) view behind these diagrams, see
+> [`service-architecture.md`](./service-architecture.md). See [`README.md`](./README.md) for the
+> full documentation map.
+
 ## Merchant Regression Flow (Primary End-to-End Scenario)
 
 This is the single highest-priority path through the system — nearly every release regression
@@ -95,3 +101,7 @@ Each step in the merchant flow builds state that the next step depends on:
 This is why the regression suite (manual and automated) always walks this path in order rather
 than testing each screen in isolation — most real-world defects in this module are **data
 consistency issues between steps**, not isolated UI bugs.
+
+**See also:** these steps are also where cross-screen [UI consistency](./ui-consistency.md)
+issues surface most often (Section 4 above shows the same data on multiple screens); the concrete
+test cases derived from this flow live in [`../regression-checklist.md`](../regression-checklist.md).

@@ -62,7 +62,7 @@ product smoke testing**, not just regression scoped to whichever product initiat
 - **Ledger Engine / Settlement Engine / Reconciliation Engine** — Collection's Settlement Service
   and Ledger Service write into the same shared ledger and reconciliation infrastructure that
   Payout and Connected Banking also write into — this is exactly why a missing-ledger-debit
-  defect (see [`bug-reports/`](../bug-reports)) is worth checking across products, not assumed
+  defect (see [`bug-reports/`](../sample-defect-report.md)) is worth checking across products, not assumed
   to be Collection-specific
 - **Merchant Onboarding / Activation** — a merchant is onboarded once at the platform level, then
   Collection-specific "Collection enablement" (see `architecture-and-flow.md`'s Admin Flow) is a

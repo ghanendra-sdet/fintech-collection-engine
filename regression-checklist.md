@@ -20,7 +20,7 @@
 ## 2. Collection-Type-Specific Test Cases
 
 > Each collection type has its own initiation flow and failure surface — see
-> [`docs/business-flow.md`](../docs/business-flow.md) for the full flow diagrams these cases are
+> [`docs/business-flow.md`](./docs/business-flow.md) for the full flow diagrams these cases are
 > derived from. A single generic "test a collection" case is not sufficient coverage.
 
 ### UPI Collection
@@ -88,7 +88,21 @@
 | TC-020 | Settlement mismatch detection | 1. Simulate a scenario where ledger total ≠ settlement total (test data) | Discrepancy is flagged, not silently settled |
 | TC-040 | Late-succeeding transaction after settlement cutoff | 1. A transaction succeeds just after a settlement cycle has already run | Transaction rolls into the *next* settlement cycle automatically — never silently dropped |
 
-## 5. Full Regression Checklist
+## 5. UI Consistency
+
+> Derived from [`docs/ui-consistency.md`](./docs/ui-consistency.md) — cross-screen consistency,
+> not single-screen correctness.
+
+| ID | Scenario | Steps | Expected Result |
+|---|---|---|---|
+| TC-059 | Status badge consistency across screens | 1. Take one dummy transaction 2. View its status on Dashboard, Transaction Search, Transaction Details, and an exported Report | Label text and color convention are identical across all four views |
+| TC-060 | Currency formatting consistency | 1. View a ₹1,00,000 dummy transaction on-screen 2. Export it to CSV/PDF | Decimal places, thousands separator, and currency symbol placement match exactly between UI and export |
+| TC-061 | Date/time formatting consistency | 1. Compare the same transaction's timestamp across Dashboard, Details, and Reports | Same date format and timezone representation everywhere |
+| TC-062 | Terminology consistency | 1. Compare column headers/labels referring to the same concept (e.g. "Merchant Reference") across Search, Details, and Reports | Identical terminology used — no "Merchant Ref" in one place and "Ref ID" in another |
+| TC-063 | Empty state presence | 1. Search with filters guaranteed to match nothing on Transaction Search, Settlement History, and Reports | Each shows a deliberate, informative empty state — never a blank screen |
+| TC-064 | Status badge distinguishable without color | 1. View SUCCESS/FAILED/DEEMED/EXPIRED badges with color/grayscale rendering simulated | Each status remains distinguishable via icon/text label alone, not color dependency |
+
+## 6. Full Regression Checklist
 
 - [ ] Login
 - [ ] Dashboard
@@ -108,8 +122,9 @@
 - [ ] GST Calculation
 - [ ] Ledger Entries
 - [ ] Permissions / Role-Based Access
+- [ ] UI Consistency (status badges, formatting, terminology, empty states, accessibility)
 
-## 6. Priority Automation Candidates
+## 7. Priority Automation Candidates
 
 1. Login
 2. Dashboard
@@ -119,6 +134,7 @@
 6. Settlement
 
 These six are automated first because they form the primary merchant regression path and are
-run on every release — see [`automation/`](../automation) for the Playwright implementation.
-Collection-type-specific scenarios (section 2 above) are the next priority tier for automation
-expansion, since they currently exist as documented manual test cases only.
+run on every release — see [`automation/`](./automation) for the Playwright implementation.
+Collection-type-specific scenarios (section 2 above) and UI consistency checks (section 5 above)
+are the next priority tier for automation expansion, since they currently exist as documented
+manual test cases only.
