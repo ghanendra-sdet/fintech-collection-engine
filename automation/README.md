@@ -6,7 +6,9 @@ Automation for the Collection Engine's primary merchant regression path, built w
 > Automated scenarios trace directly to [`../regression-checklist.md`](../regression-checklist.md)
 > (see the Priority Automation Candidates section there) and the flow diagrams in
 > [`../docs/architecture-and-flow.md`](../docs/architecture-and-flow.md). See
-> [`../docs/README.md`](../docs/README.md) for the full documentation map.
+> [`../docs/README.md`](../docs/README.md) for the full documentation map and
+> [`../docs/tech-and-skills.md`](../docs/tech-and-skills.md) for why this stack was chosen,
+> mapped to the skill each piece demonstrates.
 
 ## Why Playwright + TypeScript
 
