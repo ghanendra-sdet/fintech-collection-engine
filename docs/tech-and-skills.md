@@ -32,7 +32,7 @@
 | **Cross-Flow Consistency Testing** | Five independently-failing collection-type flows (UPI/QR/VAM/Payment Link/Manual Deposit), each with its own edge cases | [`business-flow.md`](./business-flow.md) |
 | **Requirement Traceability (RTM)** | A worked requirement → test case → status mapping | [`../sample-rtm.md`](../sample-rtm.md) |
 | **Defect Management & Root-Cause Analysis** | Worked defects identifying the actual mechanism (two independently-triggered async events; two services reading two different snapshots) rather than just the symptom | [`../sample-defect-report.md`](../sample-defect-report.md); [`architecture-and-flow.md`](./architecture-and-flow.md) |
-| **Test Reporting & Metrics** | A structured execution summary, plus 300+ tracked defects end-to-end | [`../regression-execution-summary.md`](../regression-execution-summary.md) |
+| **Test Reporting & Metrics** | A structured performance-test report with real throughput/latency numbers, plus 300+ tracked defects end-to-end | [`../performance-test-summary.md`](../performance-test-summary.md) |
 | **Technical Documentation & Communication** | The full seven-document `docs/` set, each with a distinct, non-overlapping purpose | [`README.md`](./README.md) |
 
 ## 3. The Testing Pyramid Applied to This Project
