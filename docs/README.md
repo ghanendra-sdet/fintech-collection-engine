@@ -10,14 +10,16 @@
 | **What is this, in plain terms?** | [`business-overview.md`](./business-overview.md) — the "start here" doc: what problem it solves, business objectives, why it's high-risk |
 | **Who's involved? (Stakeholders)** | [`business-overview.md`](./business-overview.md) section 3 — Merchant, Customer, Admin/Ops, Finance, Compliance, Support, and more |
 | **What does it depend on?** | [`shared-platform-services.md`](./shared-platform-services.md) (company-wide shared engines) + [`service-architecture.md`](./service-architecture.md) (this product's own ~40 services) |
-| **How does it work, technically?** (Tech Flow) | [`architecture-and-flow.md`](./architecture-and-flow.md) — internal state machines, admin flow, system interaction map — plus [`service-architecture.md`](./service-architecture.md) for the microservice-level view |
+| **How does it work, technically?** (Tech Flow) | [`architecture-and-flow.md`](./architecture-and-flow.md) — real Mermaid state machines, admin flow, system interaction map, and the exact mechanism behind two real defects — plus [`service-architecture.md`](./service-architecture.md) for the microservice-level view |
 | **What does the customer/merchant actually experience?** (Business Flow + User Flow) | [`business-flow.md`](./business-flow.md) — the real end-to-end journey per collection type (UPI/QR/VAM/Payment Link/Manual Deposit), from the customer's and merchant's point of view |
 | **What screens/fields exist?** | [`feature-modules.md`](./feature-modules.md) — the concrete UI inventory every flow above maps onto |
+| **What tech was used, and what skills does this repo demonstrate?** | [`tech-and-skills.md`](./tech-and-skills.md) — a skill-oriented index into the docs above |
 | **Does the UI behave consistently everywhere?** | [`ui-consistency.md`](./ui-consistency.md) — status badges, formatting, terminology, accessibility, cross-browser/responsive behavior |
 | **What's actually tested?** | [`../regression-checklist.md`](../regression-checklist.md) — the full suite, cross-referenced to every doc above |
 | **What's been automated?** | [`../automation/`](../automation) |
 | **What real defects has this surfaced?** | [`../sample-defect-report.md`](../sample-defect-report.md) |
 | **How does it perform under load?** | [`../performance-test-summary.md`](../performance-test-summary.md) |
+| **What does a Requirement Traceability Matrix (RTM) actually look like?** | [`../sample-rtm.md`](../sample-rtm.md) |
 
 ## Reading Order (Recommended)
 
@@ -43,10 +45,14 @@ understanding most naturally — each doc assumes you've absorbed the ones befor
 6. shared-platform-services.md ← the "what it shares" — company-wide dependencies
         │
         ▼
-7. ui-consistency.md           ← the "does it hold together" — cross-screen UI consistency
+7. tech-and-skills.md          ← the "which skill, proven where" — a skill-oriented index
+        │                         into everything above
+        ▼
+8. ui-consistency.md           ← the "does it hold together" — cross-screen UI consistency
         │
         ▼
-8. regression-checklist.md, automation/, sample-defect-report.md, performance-test-summary.md   ← the proof — coverage, automation, real findings, real numbers
+9. regression-checklist.md, automation/, sample-defect-report.md, sample-rtm.md,
+   performance-test-summary.md ← the proof — coverage, automation, real findings, real numbers
 ```
 
 ## Business Flow vs. Tech Flow vs. User Flow — What's the Difference Here?
