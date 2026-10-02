@@ -31,8 +31,12 @@
 11. [Repository Structure](#-repository-structure)
 
 > Deeper dives not covered inline in this README: [Stakeholders & Dependencies](./docs/business-overview.md),
+> [Architecture, Flow & Real Sequence Diagrams](./docs/architecture-and-flow.md),
+> [Full Tech Stack & Skills Demonstrated](./docs/tech-and-skills.md),
 > [Service Architecture](./docs/service-architecture.md), [Shared Platform Services](./docs/shared-platform-services.md),
-> [UI Consistency](./docs/ui-consistency.md) — see [`docs/README.md`](./docs/README.md) for the full map.
+> [UI Consistency](./docs/ui-consistency.md) — see [`docs/README.md`](./docs/README.md) for the
+> full map. **Every diagram in this repo is drawn in Mermaid and renders natively right here on
+> GitHub — nothing requires visiting another site.**
 
 ---
 
@@ -134,31 +138,20 @@ run starts here. Each arrow below is annotated with what's actually being valida
 step, since most real-world defects in this module are **data consistency issues between steps**,
 not isolated screen bugs.
 
+```mermaid
+flowchart TD
+    A["Login<br/>authenticates the merchant session"] --> B["Dashboard<br/>summary tiles must match live transaction data — never stale/cached"]
+    B --> C["Collection -> UPI / QR / VAM / Payment Link / Manual Deposit<br/>5 independent initiation flows, each its own failure surface"]
+    C --> D["Transaction Search<br/>filter by Order ID / Txn ID / UTR / Merchant Ref / Customer / Date / Status"]
+    D --> E["Transaction Details<br/>every field must match the Search row exactly — no drift"]
+    E --> F["Settlement<br/>reconciles to the Ledger, net of Commercial fee + GST, correct to the paisa"]
+    F --> G["Reports<br/>exported totals must match Settlement + Transaction data byte-for-byte"]
 ```
-Login
-  │  authenticates the merchant session
-  ▼
-Dashboard
-  │  summary tiles (Today's Collection, Success Rate, etc.) must match live
-  │  transaction data — never a stale/cached value
-  ▼
-Collection ──▶ UPI · QR · VAM · Payment Link · Manual Deposit
-  │             5 independent initiation flows, each with its own failure
-  │             surface — see docs/business-flow.md for the detailed diagrams
-  ▼
-Transaction Search
-  │  filter by Order ID / Transaction ID / UTR / Merchant Ref / Customer / Date / Status
-  ▼
-Transaction Details
-  │  every field (status, gateway response, amount, GST, commercial,
-  │  settlement, timeline) must match the Search row exactly — no drift
-  ▼
-Settlement
-  │  reconciles to the Ledger, net of Commercial fee + GST, correct to the paisa
-  ▼
-Reports
-     exported totals must match Settlement + Transaction data byte-for-byte
-```
+
+See [`docs/business-flow.md`](./docs/business-flow.md) for the detailed per-collection-type
+diagrams, and [`docs/architecture-and-flow.md`](./docs/architecture-and-flow.md) for the full set
+of Mermaid sequence diagrams — including exactly how a ledger-mismatch or settlement-drift
+defect actually happens under the hood.
 
 > For the full customer-facing journey behind the "Collection" step — what actually happens for
 > each collection type, from the customer's perspective, through to settlement — see
@@ -279,9 +272,10 @@ Full checklist with edge cases available in [`regression-checklist.md`](./regres
 
 ## 📸 Screenshots & Reports
 
-Sample test execution reports, defect report templates, and performance test summaries are
-available in [`performance-test-summary.md`](./performance-test-summary.md) and
-[`sample-defect-report.md`](./sample-defect-report.md).
+Sample test execution reports, defect report templates, performance test summaries, and a worked
+Requirement Traceability Matrix are available in
+[`performance-test-summary.md`](./performance-test-summary.md),
+[`sample-defect-report.md`](./sample-defect-report.md), and [`sample-rtm.md`](./sample-rtm.md).
 
 ---
 
@@ -297,12 +291,15 @@ fintech-collection-engine/
 ├── regression-checklist.md       → Full regression suite + edge cases (64 test cases)
 ├── sample-defect-report.md       → Defect theme taxonomy + worked defect examples
 ├── performance-test-summary.md   → Sample JMeter load test report
+├── sample-rtm.md                 → Worked Requirement Traceability Matrix, including real coverage gaps
 ├── docs/
 │   ├── README.md                 → 📍 Documentation map — start here
 │   ├── business-overview.md      → What Collection Engine is, stakeholders, dependencies, glossary
-│   ├── architecture-and-flow.md  → Internal QA/regression flow diagrams (dashboard, admin, states)
+│   ├── architecture-and-flow.md  → Real Mermaid state machines, admin flow, system interaction map,
+│   │                                 and the exact mechanism behind two real ledger/settlement defects
 │   ├── business-flow.md          → End-to-end customer payment journey per collection type, settlement, onboarding
 │   ├── feature-modules.md        → Full feature/screen inventory (Dashboard, Search, Collection Types, Reports)
+│   ├── tech-and-skills.md        → Skill → proof index into this doc set (why these tools, why these metrics)
 │   ├── service-architecture.md   → Microservice-level decomposition & integration test boundaries
 │   ├── shared-platform-services.md → Company-wide services this product depends on (Auth, GST/Ledger/Settlement Engines, etc.)
 │   └── ui-consistency.md         → Cross-screen UI/UX consistency (status badges, formatting, terminology, a11y)
