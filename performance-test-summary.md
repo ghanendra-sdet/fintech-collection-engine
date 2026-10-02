@@ -37,7 +37,10 @@ calculation queries grew during traffic spikes, the connection pool became the b
 the application's own processing capacity was exhausted.
 
 **Recommendation:** size the database connection pool for peak-hour traffic patterns, not
-average throughput, and add connection-pool-utilization alerting ahead of saturation.
+average throughput, and add connection-pool-utilization alerting ahead of saturation. See
+[`sample-rtm.md`](./sample-rtm.md) REQ-809 for the functional-regression follow-up this
+infrastructure finding surfaced: what should actually happen to an individual transaction caught
+in flight when the pool saturates, not just how to avoid saturating it.
 
 ## Test Coverage During Load Run
 

@@ -48,7 +48,9 @@ from the merchant's settlement amount.
 
 **Actual Result**
 No ledger entry is created for the commercial fee — the settlement amount reflects the deduction,
-but the ledger shows only the gross transaction credit, with no matching debit line.
+but the ledger shows only the gross transaction credit, with no matching debit line. See
+[`docs/architecture-and-flow.md`](./docs/architecture-and-flow.md) for this exact mechanism
+shown as a sequence diagram.
 
 **Impact**
 Breaks the audit trail: settlement and ledger totals will not reconcile, which could cause
@@ -120,7 +122,8 @@ transactions — settlement is, by definition, a reflection of the ledger.
 The Settlement Report total is ₹1,240 higher than the Ledger sum. Investigation shows the
 Settlement Report includes a small number of transactions that were later reversed, while the
 Ledger correctly excludes them — the two services are reading from different snapshots of
-transaction state.
+transaction state. See [`docs/architecture-and-flow.md`](./docs/architecture-and-flow.md) for
+this exact mechanism shown as a sequence diagram.
 
 **Impact**
 A merchant reconciling the Settlement Report against their own bank credit would see a mismatch
