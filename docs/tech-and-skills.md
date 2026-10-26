@@ -18,13 +18,13 @@
 | **CI/CD** | Jenkins / GitHub Actions | Automates the regression suite on a schedule/trigger |
 | **Bug Tracking & Traceability** | JIRA, RTM | Full defect lifecycle tracking plus requirement-to-test-coverage traceability — see [`../sample-rtm.md`](../sample-rtm.md) |
 | **Version Control** | Git, GitHub | This repo itself; diagrams throughout `architecture-and-flow.md` are Mermaid, which GitHub renders natively with zero extra tooling |
-| **Test Management** | TestRail / Zephyr | Case management for the 64-case regression suite |
+| **Test Management** | TestRail / Zephyr | Case management for the 46-case regression suite |
 
 ## 2. Skills Demonstrated — Skill → Where to See It
 
 | Skill | Demonstrated By | Where to Look |
 |---|---|---|
-| **Manual / Functional Testing** | Full Login-to-Reports regression suite (64 cases) | [`../regression-checklist.md`](../regression-checklist.md) |
+| **Manual / Functional Testing** | Full Login-to-Reports regression suite (46 cases) | [`../regression-checklist.md`](../regression-checklist.md) |
 | **API Testing** | Transaction status, commercial/GST, settlement API validation | [`../regression-checklist.md`](../regression-checklist.md) |
 | **UI Automation** | Playwright + POM spec covering the highest-priority merchant journey | [`../automation/sample-collection.spec.ts`](../automation/sample-collection.spec.ts) |
 | **Performance / Load Testing** | A real 3-hour, 180,000-transaction JMeter soak test with P90/P95/P99 latency and a concrete bottleneck finding (DB connection pool saturation) | [`../performance-test-summary.md`](../performance-test-summary.md) |
@@ -39,19 +39,24 @@
 
 ```mermaid
 flowchart TD
-    UNIT["Unit Tests<br/>(owned by the application dev team — out of this QA scope)"]
-    API["API Tests<br/>transaction status, commercial/GST, settlement contracts"]
-    UI["UI / E2E Tests<br/>Playwright — Login -> Dashboard -> Collection -> ... -> Reports"]
-    PERF["Performance Tests<br/>JMeter — real 3-hour soak test, 180K transactions"]
+    UNIT["⚙️ Unit Tests<br/>(owned by the application dev team — out of this QA scope)"]
+    API["🔌 API Tests<br/>transaction status, commercial/GST, settlement contracts"]
+    UI["🖥️ UI / E2E Tests<br/>Playwright — Login -> Dashboard -> Collection -> ... -> Reports"]
+    PERF["📈 Performance Tests<br/>JMeter — real 3-hour soak test, 180K transactions"]
     UNIT --> API --> UI --> PERF
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    classDef neutral fill:#37474f,stroke:#90a4ae,color:#fff
+    class UNIT neutral
+    class API,UI,PERF service
 ```
 
 **Why this pyramid is already backed by real numbers, not just a shape:** per
 [`../performance-test-summary.md`](../performance-test-summary.md), the top layer here isn't
 illustrative — it's an actual executed test with a concrete finding (database connection pool
-saturation as the limiting factor, not application logic). That's worth naming explicitly: the
-other repos in this portfolio describe *what* performance testing for their domain would look
-like; this one already has a real result to point to.
+saturation as the limiting factor, not application logic). That's worth naming explicitly, since
+it's easy for a performance-testing section to describe what a load test *would* find without
+ever actually running one.
 
 ## 4. CI/CD — Suggested Pipeline Shape
 
@@ -63,12 +68,21 @@ like; this one already has a real result to point to.
 
 ```mermaid
 flowchart LR
-    PR["Pull Request opened"] --> API["API suite<br/>(transaction status, commercial/GST, settlement)"]
-    API --> UI["Playwright UI suite<br/>(Login -> ... -> Reports)"]
-    UI --> Gate{"All required checks pass?"}
-    Gate -->|Yes| Merge["Merge allowed"]
-    Gate -->|No| Block["Merge blocked — failure surfaced on the PR"]
-    Merge --> Nightly["Nightly: JMeter soak-test run<br/>(too slow/expensive for per-PR gating)"]
+    PR["🔀 Pull Request opened"] --> API["🔌 API suite<br/>(transaction status, commercial/GST, settlement)"]
+    API --> UI["🖥️ Playwright UI suite<br/>(Login -> ... -> Reports)"]
+    UI --> Gate{"🛂 All required checks pass?"}
+    Gate -->|Yes| Merge["✅ Merge allowed"]
+    Gate -->|No| Block["❌ Merge blocked — failure surfaced on the PR"]
+    Merge --> Nightly["🌙 Nightly: JMeter soak-test run<br/>(too slow/expensive for per-PR gating)"]
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    classDef gate fill:#4a148c,stroke:#ab47bc,color:#fff
+    classDef good fill:#1b5e20,stroke:#43a047,color:#fff
+    classDef bad fill:#b71c1c,stroke:#e53935,color:#fff
+    class PR,API,UI,Nightly service
+    class Gate gate
+    class Merge good
+    class Block bad
 ```
 
 ## 5. Performance Testing — Pointing at the Real Result, Not Repeating It
