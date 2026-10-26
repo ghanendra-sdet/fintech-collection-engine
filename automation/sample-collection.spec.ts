@@ -116,8 +116,11 @@ test.describe('Collection Engine — Primary Regression Flow', () => {
     await search.goto();
     await search.searchByStatus('SUCCESS');
 
+    // This dummy merchant has prior SUCCESS transactions, so the filter must return at least
+    // one — a count of 0 here would mean the filter itself is broken, not a valid empty state
+    // (an empty-results scenario is covered separately by TC-015).
     const resultsCount = await search.getResultsCount();
-    expect(resultsCount).toBeGreaterThanOrEqual(0);
+    expect(resultsCount).toBeGreaterThan(0);
     // Every visible row's status badge should read SUCCESS — spot-check the first row
     const firstStatus = await page.getByTestId('search-results-row').first()
       .getByTestId('row-status').innerText();
