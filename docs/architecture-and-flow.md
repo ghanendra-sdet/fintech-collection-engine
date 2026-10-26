@@ -6,7 +6,7 @@
 > [`service-architecture.md`](./service-architecture.md). See [`README.md`](./README.md) for the
 > full documentation map.
 >
-> Every diagram below is drawn in [Mermaid](https://mermaid.js.org/), which GitHub renders
+> Every diagram below is drawn in <a href="https://mermaid.js.org/" target="_blank" rel="noopener noreferrer">Mermaid</a>, which GitHub renders
 > natively in-page — nothing here requires opening another site or tool to read it.
 
 ## Merchant Regression Flow (Primary End-to-End Scenario)
@@ -16,21 +16,27 @@ run starts here:
 
 ```mermaid
 flowchart LR
-    Login --> Dashboard --> Collection --> Search["Transaction Search"]
-    Search --> Details["Transaction Details"]
-    Details --> Settlement
-    Settlement --> Reports
+    Login["🔑 Login"] --> Dashboard["📊 Dashboard"] --> Collection["💰 Collection"] --> Search["🔍 Transaction Search"]
+    Search --> Details["📋 Transaction Details"]
+    Details --> Settlement["🧮 Settlement"]
+    Settlement --> Reports["📄 Reports"]
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    class Login,Dashboard,Collection,Search,Details,Settlement,Reports service
 ```
 
 ## Admin Flow
 
 ```mermaid
 flowchart LR
-    Onboard["Merchant Onboarding"] --> Activate["Merchant Activation"]
-    Activate --> Enable["Collection Enablement"]
-    Enable --> Config["Commercial Configuration"]
-    Config --> Monitor["Merchant / Settlement Monitoring"]
-    Monitor --> Audit["Audit Logs"]
+    Onboard["🧾 Merchant Onboarding"] --> Activate["🔓 Merchant Activation"]
+    Activate --> Enable["⚙️ Collection Enablement"]
+    Enable --> Config["🧮 Commercial Configuration"]
+    Config --> Monitor["📊 Merchant / Settlement Monitoring"]
+    Monitor --> Audit["📋 Audit Logs"]
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    class Onboard,Activate,Enable,Config,Monitor,Audit service
 ```
 
 ## Transaction Lifecycle States
@@ -39,13 +45,20 @@ flowchart LR
 stateDiagram-v2
     [*] --> INITIATED
     INITIATED --> PROCESSING
-    PROCESSING --> SUCCESS
-    PROCESSING --> FAILED
-    PROCESSING --> DEEMED
-    PROCESSING --> EXPIRED
+    PROCESSING --> SUCCESS: ✅
+    PROCESSING --> FAILED: ❌
+    PROCESSING --> DEEMED: ⚠️
+    PROCESSING --> EXPIRED: ⏳
     SUCCESS --> [*]
     FAILED --> [*]
     EXPIRED --> [*]
+
+    classDef good fill:#1b5e20,stroke:#43a047,color:#fff
+    classDef bad fill:#b71c1c,stroke:#e53935,color:#fff
+    classDef warn fill:#e65100,stroke:#fb8c00,color:#fff
+    class SUCCESS good
+    class FAILED bad
+    class DEEMED,EXPIRED warn
 ```
 
 - **SUCCESS** — payment completed, funds move toward settlement
@@ -57,13 +70,18 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Merchant([Merchant / Customer Payment]) --> CE["Collection Engine"]
-    CB["Connected Banking"] -->|money movement| CE
-    CE --> CommE["Commercial Engine<br/>(fee + GST calc)"]
-    CE --> Ledger["Ledger<br/>(audit trail)"]
+    Merchant(["🧑‍💼 Merchant / Customer Payment"]) --> CE["💰 Collection Engine"]
+    CB["🏦 Connected Banking"] -->|money movement| CE
+    CE --> CommE["🧮 Commercial Engine<br/>(fee + GST calc)"]
+    CE --> Ledger["📒 Ledger<br/>(audit trail)"]
     CommE --> Ledger
-    Ledger --> Settle["Settlement & Reconciliation"]
-    Settle --> Reporting
+    Ledger --> Settle["🔄 Settlement & Reconciliation"]
+    Settle --> Reporting["📄 Reporting"]
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    classDef person fill:#1a237e,stroke:#5c6bc0,color:#fff
+    class Merchant person
+    class CE,CB,CommE,Ledger,Settle,Reporting service
 ```
 
 ## The Real Mechanism Behind Defect #1 — Why "Ledger Entry Missing" Actually Happens
@@ -75,21 +93,25 @@ why it keeps recurring, shown as a sequence rather than described in prose alone
 
 ```mermaid
 sequenceDiagram
-    participant Pay as Payment Processing Service
-    participant Settle as Settlement Calculation Service
-    participant Ledger as Ledger Service
+    participant Pay as 🖥️ Payment Processing Service
+    participant Settle as 🧮 Settlement Calculation Service
+    participant Ledger as 📒 Ledger Service
 
     Pay->>Pay: Transaction reaches SUCCESS
     Pay->>Settle: Trigger settlement calculation (async event)
     Pay->>Ledger: Trigger ledger write (separate async event)
     alt Both events fire reliably
+        rect rgb(27, 94, 32)
         Settle->>Settle: Computes net settlement (gross - fee - GST)
         Ledger->>Ledger: Writes credit (gross) AND debit (fee) entries
         Note over Settle,Ledger: Settlement and Ledger agree — correct
+        end
     else Ledger-write event is dropped or fails silently
+        rect rgb(183, 28, 28)
         Settle->>Settle: Still computes net settlement correctly
         Ledger->>Ledger: Writes ONLY the credit entry — debit never arrives<br/>(this IS Defect #1's actual root cause)
         Note over Settle,Ledger: Settlement total implies a fee was deducted;<br/>Ledger shows no matching debit — audit trail breaks
+        end
     end
 ```
 
@@ -106,16 +128,20 @@ ledger write co-own the settlement calculation's own success) cannot drift apart
 
 ```mermaid
 sequenceDiagram
-    participant Txn as Transaction State (authoritative)
-    participant Ledger as Ledger Service
-    participant SettleRpt as Settlement Report Service
+    participant Txn as 🖥️ Transaction State (authoritative)
+    participant Ledger as 📒 Ledger Service
+    participant SettleRpt as ⚠️ Settlement Report Service
 
     Note over Txn: A transaction is later reversed
     Txn->>Ledger: Reads current, authoritative transaction state
+    rect rgb(27, 94, 32)
     Ledger->>Ledger: Correctly excludes the reversed transaction
+    end
     Txn->>SettleRpt: Reads from a separately-cached transaction snapshot<br/>(this IS Defect #3's actual root cause)
+    rect rgb(183, 28, 28)
     SettleRpt->>SettleRpt: Snapshot predates the reversal — includes it anyway
     Note over Ledger,SettleRpt: Settlement Report total is now ₹1,240 higher<br/>than the Ledger's own total, for the same date range
+    end
 ```
 
 **Why this is the same root shape as Defect #1, in a different pair of services:** both defects
