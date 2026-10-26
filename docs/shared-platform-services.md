@@ -6,7 +6,7 @@
 > from the ~40 services enumerated in [`service-architecture.md`](./service-architecture.md)
 > that belong to Collection Engine specifically.
 
-## Why "Shared Platform" Matters for Testing
+## A Blast Radius Bigger Than One Product
 
 A defect in a shared service doesn't stay contained to one product. A bug in the company-wide
 **GST Engine**, for example, doesn't just affect Collection Engine's commercial calculations —
@@ -62,7 +62,7 @@ product smoke testing**, not just regression scoped to whichever product initiat
 - **Ledger Engine / Settlement Engine / Reconciliation Engine** — Collection's Settlement Service
   and Ledger Service write into the same shared ledger and reconciliation infrastructure that
   Payout and Connected Banking also write into — this is exactly why a missing-ledger-debit
-  defect (see [`bug-reports/`](../sample-defect-report.md)) is worth checking across products, not assumed
+  defect (see [`sample-defect-report.md`](../sample-defect-report.md)) is worth checking across products, not assumed
   to be Collection-specific
 - **Merchant Onboarding / Activation** — a merchant is onboarded once at the platform level, then
   Collection-specific "Collection enablement" (see `architecture-and-flow.md`'s Admin Flow) is a
@@ -76,7 +76,7 @@ product smoke testing**, not just regression scoped to whichever product initiat
 
 | Product | Approx. Services |
 |---|---|
-| Collection | 38 |
+| Collection | 40 |
 | Payout | 35 |
 | Connected Banking | 28 |
 | Shared Platform | 28 |
