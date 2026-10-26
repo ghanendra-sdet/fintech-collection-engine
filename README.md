@@ -29,6 +29,7 @@
 9. [Regression Checklist](#-regression-checklist)
 10. [Screenshots & Reports](#-screenshots--reports)
 11. [Repository Structure](#-repository-structure)
+12. [Support & Dispute Resolution](#-support--dispute-resolution)
 
 > Deeper dives not covered inline in this README: [Stakeholders & Dependencies](./docs/business-overview.md),
 > [Architecture, Flow & Real Sequence Diagrams](./docs/architecture-and-flow.md),
@@ -140,12 +141,15 @@ not isolated screen bugs.
 
 ```mermaid
 flowchart TD
-    A["Login<br/>authenticates the merchant session"] --> B["Dashboard<br/>summary tiles must match live transaction data — never stale/cached"]
-    B --> C["Collection -> UPI / QR / VAM / Payment Link / Manual Deposit<br/>5 independent initiation flows, each its own failure surface"]
-    C --> D["Transaction Search<br/>filter by Order ID / Txn ID / UTR / Merchant Ref / Customer / Date / Status"]
-    D --> E["Transaction Details<br/>every field must match the Search row exactly — no drift"]
-    E --> F["Settlement<br/>reconciles to the Ledger, net of Commercial fee + GST, correct to the paisa"]
-    F --> G["Reports<br/>exported totals must match Settlement + Transaction data byte-for-byte"]
+    A["🔑 Login<br/>authenticates the merchant session"] --> B["📊 Dashboard<br/>summary tiles must match live transaction data — never stale/cached"]
+    B --> C["💰 Collection -> UPI / QR / VAM / Payment Link / Manual Deposit<br/>5 independent initiation flows, each its own failure surface"]
+    C --> D["🔍 Transaction Search<br/>filter by Order ID / Txn ID / UTR / Merchant Ref / Customer / Date / Status"]
+    D --> E["📋 Transaction Details<br/>every field must match the Search row exactly — no drift"]
+    E --> F["🧮 Settlement<br/>reconciles to the Ledger, net of Commercial fee + GST, correct to the paisa"]
+    F --> G["📄 Reports<br/>exported totals must match Settlement + Transaction data byte-for-byte"]
+
+    classDef service fill:#004d40,stroke:#26a69a,color:#fff
+    class A,B,C,D,E,F,G service
 ```
 
 See [`docs/business-flow.md`](./docs/business-flow.md) for the detailed per-collection-type
@@ -288,7 +292,7 @@ Requirement Traceability Matrix are available in
 ```
 fintech-collection-engine/
 ├── README.md                     → This file
-├── regression-checklist.md       → Full regression suite + edge cases (64 test cases)
+├── regression-checklist.md       → Full regression suite + edge cases (46 test cases)
 ├── sample-defect-report.md       → Defect theme taxonomy + worked defect examples
 ├── performance-test-summary.md   → Sample JMeter load test report
 ├── sample-rtm.md                 → Worked Requirement Traceability Matrix, including real coverage gaps
@@ -321,7 +325,7 @@ fintech-collection-engine/
 ## 🤖 Support & Dispute Resolution
 
 Collection issues (stuck transactions, disputes, account detail changes) are handled by the
-shared [AI Dispute Resolution Engine](https://github.com/ghanendra-sdet/ai-dispute-resolution-engine)
+shared <a href="https://github.com/ghanendra-sdet/ai-dispute-resolution-engine" target="_blank" rel="noopener noreferrer">AI Dispute Resolution Engine</a>
 — a single AI-powered support layer common across Collection, Payout, Connected Banking, BBPS,
 Reseller, and YOBO. It resolves ~80% of issues without human involvement, cutting average ticket resolution
 time from a 24–72 hour baseline to under 6 hours.
