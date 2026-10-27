@@ -93,7 +93,7 @@ UI text should never introduce synonyms for the same concept. Common drift patte
 
 ## Coverage Mapping
 
-See [`test-cases/regression-checklist.md`](../regression-checklist.md) section 14 for
+See [`regression-checklist.md`](../regression-checklist.md) section 14 for
 the UI consistency test cases (TC-059–064) derived from this document.
 
 ## Why This Matters at Scale
@@ -101,6 +101,6 @@ the UI consistency test cases (TC-059–064) derived from this document.
 A single inconsistency (say, Settlement showing amounts without paise while Transaction Details
 shows them with paise) looks minor in isolation. But across a platform processing high transaction
 volume (see [`service-architecture.md`](./service-architecture.md) and
-[`test-reports/performance-test-summary.md`](../performance-test-summary.md)), that
+[`performance-test-summary.md`](../performance-test-summary.md)), that
 kind of drift is exactly what erodes merchant trust over time — it reads as "the numbers don't
 quite add up," even when every individual number is technically correct.
