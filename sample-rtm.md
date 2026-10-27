@@ -39,7 +39,7 @@ tests that already exist:
   document stops at the infrastructure recommendation ("size the pool for peak-hour patterns").
   It never asks the functional-QA follow-up question: when the pool *is* saturated, what actually
   happens to the merchant's transaction in flight at that exact moment — does it queue and
-  eventually succeed, retry transparently, or fail outright with a clear error? None of the 64
+  eventually succeed, retry transparently, or fail outright with a clear error? None of the 46
   cases in [`regression-checklist.md`](./regression-checklist.md) answer that, because it's a
   functional question that only became visible *after* the performance test surfaced the
   bottleneck in the first place. Raised as a new story (illustrative ID `COL-4021`): add a
